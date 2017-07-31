@@ -217,6 +217,15 @@ namespace Flurl.Http
 			var uri = request.RequestUri;
 			var cookieHandler = HttpMessageHandler as HttpClientHandler;
 
+            if (cookieHandler == null)
+            {
+                var delegatingHandler = HttpMessageHandler as DelegatingHandler;
+                if (delegatingHandler != null)
+                {
+                    cookieHandler = delegatingHandler.InnerHandler as HttpClientHandler;
+                }
+            }
+
 			// if the inner handler is an HttpClientHandler (which it usually is), put the cookies in the CookieContainer.
 			if (cookieHandler != null && cookieHandler.UseCookies) {
 				if (cookieHandler.CookieContainer == null)
